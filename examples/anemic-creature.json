@@ -1,7 +1,7 @@
 {
-  "id": 12,
-  "name": "Angel",
+  "id": "Angel",
   "level": 7,
+
   "faction": "castle",
   "growth": 1,
   "upgrades": [
