@@ -1,13 +1,23 @@
 package pl.nakodach.pl.nakodach.heroesofddd.shared.kernel
 
-data class Cost(private val resources: Map<ResourceType, Amount>)
+data class Cost(private val resources: Map<ResourceType, Amount>) {
+    companion object {
+        fun resources(vararg resources: Pair<ResourceType, Int>): Cost = Cost(resources.associate {
+            it.first to Amount(
+                it.second
+            )
+        })
+    }
+
+    operator fun times(multiplier: Int): Cost = Cost(resources.mapValues { Amount(it.value.raw * multiplier) })
+}
 
 data class Amount(val raw: Int) {
 
     companion object {
-        fun of(raw: Int) {
+        fun of(raw: Int): Amount {
             require(raw >= 0) { "Amount cannot be negative" }
-            Amount(raw)
+            return Amount(raw)
         }
 
         fun zero() = Amount(0)
