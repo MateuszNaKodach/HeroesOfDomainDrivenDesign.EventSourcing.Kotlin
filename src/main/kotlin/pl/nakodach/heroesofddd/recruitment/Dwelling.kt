@@ -46,20 +46,7 @@ sealed class DwellingEvent {
 data class Dwelling(val creatureId: CreatureId, val costPerTroop: Cost, val availableTroops: Amount)
 
 fun dwelling(creatureId: CreatureId, costPerTroop: Cost): IDecider<DwellingCommand, Dwelling, DwellingEvent> = Decider(
-    decide = { command, state ->
-        when (command) {
-            is DwellingCommand.RecruitCreature -> if (state.creatureId == command.creatureId && state.availableTroops >= command.amount) listOf(
-                DwellingEvent.CreatureRecruited(command.creatureId, command.amount, costPerTroop * command.amount.raw)
-            ) else emptyList()
-
-            is DwellingCommand.IncreaseAvailableTroops -> listOf(
-                DwellingEvent.AvailableTroopsChanged(
-                    command.creatureId,
-                    command.amount
-                )
-            )
-        }
-    },
+    decide = ::decide,
     evolve = { state, event ->
         when (event) {
             is DwellingEvent.CreatureRecruited -> state.copy(availableTroops = state.availableTroops - event.amount)
@@ -68,3 +55,24 @@ fun dwelling(creatureId: CreatureId, costPerTroop: Cost): IDecider<DwellingComma
     },
     initialState = Dwelling(creatureId, costPerTroop, Amount.zero())
 )
+
+private fun decide(command: DwellingCommand, state: Dwelling): List<DwellingEvent> =
+    when (command) {
+        is DwellingCommand.RecruitCreature -> {
+            if (state.creatureId != command.creatureId || state.availableTroops < command.amount) emptyList<DwellingEvent>()
+            listOf(
+                DwellingEvent.CreatureRecruited(
+                    command.creatureId,
+                    command.amount,
+                    state.costPerTroop * command.amount.raw
+                )
+            )
+        }
+
+        is DwellingCommand.IncreaseAvailableTroops -> listOf(
+            DwellingEvent.AvailableTroopsChanged(
+                command.creatureId,
+                command.amount
+            )
+        )
+    }
