@@ -59,14 +59,16 @@ fun dwelling(creatureId: CreatureId, costPerTroop: Cost): IDecider<DwellingComma
 private fun decide(command: DwellingCommand, state: Dwelling): List<DwellingEvent> =
     when (command) {
         is DwellingCommand.RecruitCreature -> {
-            if (state.creatureId != command.creatureId || state.availableTroops < command.amount) emptyList<DwellingEvent>()
-            listOf(
-                DwellingEvent.CreatureRecruited(
-                    command.creatureId,
-                    command.amount,
-                    state.costPerTroop * command.amount.raw
+            if (state.creatureId != command.creatureId || command.amount > state.availableTroops)
+                emptyList()
+            else
+                listOf(
+                    DwellingEvent.CreatureRecruited(
+                        command.creatureId,
+                        command.amount,
+                        state.costPerTroop * command.amount.raw
+                    )
                 )
-            )
         }
 
         is DwellingCommand.IncreaseAvailableTroops -> listOf(

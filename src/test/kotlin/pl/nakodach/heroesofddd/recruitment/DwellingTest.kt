@@ -97,6 +97,58 @@ class DwellingTest {
         assertThat(thenEvents).isEmpty()
     }
 
+    @Test
+    fun `given Dwelling with recruited all available troops, when recruit troop, then nothing`() {
+        // given
+        val givenEvents = listOf(
+            AvailableTroopsChanged(angelId, Amount.of(3)),
+            CreatureRecruited(
+                angelId,
+                Amount.of(2),
+                Cost.resources(ResourceType.GOLD to 6000, ResourceType.CRYSTAL to 2)
+            ),
+            CreatureRecruited(
+                angelId,
+                Amount.of(1),
+                Cost.resources(ResourceType.GOLD to 3000, ResourceType.CRYSTAL to 1)
+            ),
+        )
+
+        // when
+        val whenCommand = RecruitCreature(archangelId, Amount.of(1))
+
+        // then
+        val thenEvents = decide(givenEvents, whenCommand)
+        assertThat(thenEvents).isEmpty()
+    }
+
+    @Test
+    fun `given Dwelling with recruited some available troops and 1 left, when recruit 1 troop, then recruited`() {
+        // given
+        val givenEvents = listOf(
+            AvailableTroopsChanged(angelId, Amount.of(4)),
+            CreatureRecruited(
+                angelId,
+                Amount.of(3),
+                Cost.resources(ResourceType.GOLD to 9000, ResourceType.CRYSTAL to 3)
+            ),
+        )
+
+        // when
+        val whenCommand = RecruitCreature(angelId, Amount.of(1))
+
+        // then
+        val thenEvents = decide(givenEvents, whenCommand)
+        val expectedEvent = CreatureRecruited(
+            angelId,
+            Amount.of(1),
+            Cost.resources(ResourceType.GOLD to 3000, ResourceType.CRYSTAL to 1)
+        )
+        assertThat(thenEvents).containsExactly(expectedEvent)
+    }
+
+    // todo: increase available troops
+
     private fun decide(
         givenEvents: Collection<DwellingEvent>,
         whenCommand: DwellingCommand
