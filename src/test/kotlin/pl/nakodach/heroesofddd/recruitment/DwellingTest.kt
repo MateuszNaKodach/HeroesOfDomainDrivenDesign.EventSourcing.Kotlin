@@ -38,7 +38,7 @@ class DwellingTest {
     @Test
     fun `given Dwelling with 1 troop, when recruit 1 troop, then recruited`() {
         // given
-        val givenEvents = listOf(AvailableTroopsChanged(angelId, Amount.of(1)))
+        val givenEvents = listOf(AvailableCreaturesChanged(angelId, Amount.of(1)))
 
         // when
         val whenCommand = RecruitCreature(angelId, Amount.of(1))
@@ -56,7 +56,7 @@ class DwellingTest {
     @Test
     fun `given Dwelling with 4 troop, when recruit 3 troop, then recruited 2 and totalCost = costPerTroop x 3`() {
         // given
-        val givenEvents = listOf(AvailableTroopsChanged(angelId, Amount.of(4)))
+        val givenEvents = listOf(AvailableCreaturesChanged(angelId, Amount.of(4)))
 
         // when
         val whenCommand = RecruitCreature(angelId, Amount.of(3))
@@ -74,7 +74,7 @@ class DwellingTest {
     @Test
     fun `given Dwelling with 1 troop, when recruit 2 troops, then nothing`() {
         // given
-        val givenEvents = listOf(AvailableTroopsChanged(angelId, Amount.of(1)))
+        val givenEvents = listOf(AvailableCreaturesChanged(angelId, Amount.of(1)))
 
         // when
         val whenCommand = RecruitCreature(angelId, Amount.of(2))
@@ -87,7 +87,7 @@ class DwellingTest {
     @Test
     fun `given Dwelling, when recruit troop not from this dwelling, then nothing`() {
         // given
-        val givenEvents = listOf(AvailableTroopsChanged(angelId, Amount.of(1)))
+        val givenEvents = listOf(AvailableCreaturesChanged(angelId, Amount.of(1)))
 
         // when
         val whenCommand = RecruitCreature(archangelId, Amount.of(1))
@@ -101,7 +101,7 @@ class DwellingTest {
     fun `given Dwelling with recruited all available troops, when recruit troop, then nothing`() {
         // given
         val givenEvents = listOf(
-            AvailableTroopsChanged(angelId, Amount.of(3)),
+            AvailableCreaturesChanged(angelId, Amount.of(3)),
             CreatureRecruited(
                 angelId,
                 Amount.of(2),
@@ -126,7 +126,7 @@ class DwellingTest {
     fun `given Dwelling with recruited some available troops and 1 left, when recruit 1 troop, then recruited`() {
         // given
         val givenEvents = listOf(
-            AvailableTroopsChanged(angelId, Amount.of(4)),
+            AvailableCreaturesChanged(angelId, Amount.of(4)),
             CreatureRecruited(
                 angelId,
                 Amount.of(3),

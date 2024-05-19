@@ -35,44 +35,44 @@ import pl.nakodach.pl.nakodach.shared.buildingblocks.domain.IDecider
 
 sealed class DwellingCommand {
     data class RecruitCreature(val creatureId: CreatureId, val amount: Amount) : DwellingCommand()
-    data class IncreaseAvailableTroops(val creatureId: CreatureId, val amount: Amount) : DwellingCommand()
+    data class IncreaseAvailableCreatures(val creatureId: CreatureId, val amount: Amount) : DwellingCommand()
 }
 
 sealed class DwellingEvent {
     data class CreatureRecruited(val creatureId: CreatureId, val amount: Amount, val totalCost: Cost) : DwellingEvent()
-    data class AvailableTroopsChanged(val creatureId: CreatureId, val changedTo: Amount) : DwellingEvent()
+    data class AvailableCreaturesChanged(val creatureId: CreatureId, val changedTo: Amount) : DwellingEvent()
 }
 
-data class Dwelling(val creatureId: CreatureId, val costPerTroop: Cost, val availableTroops: Amount)
+data class Dwelling(val creatureId: CreatureId, val costPerCreature: Cost, val availableCreatures: Amount)
 
-fun dwelling(creatureId: CreatureId, costPerTroop: Cost): IDecider<DwellingCommand, Dwelling, DwellingEvent> = Decider(
+fun dwelling(creatureId: CreatureId, costPerCreature: Cost): IDecider<DwellingCommand, Dwelling, DwellingEvent> = Decider(
     decide = ::decide,
     evolve = { state, event ->
         when (event) {
-            is DwellingEvent.CreatureRecruited -> state.copy(availableTroops = state.availableTroops - event.amount)
-            is DwellingEvent.AvailableTroopsChanged -> state.copy(availableTroops = event.changedTo)
+            is DwellingEvent.CreatureRecruited -> state.copy(availableCreatures = state.availableCreatures - event.amount)
+            is DwellingEvent.AvailableCreaturesChanged -> state.copy(availableCreatures = event.changedTo)
         }
     },
-    initialState = Dwelling(creatureId, costPerTroop, Amount.zero())
+    initialState = Dwelling(creatureId, costPerCreature, Amount.zero())
 )
 
 private fun decide(command: DwellingCommand, state: Dwelling): List<DwellingEvent> =
     when (command) {
         is DwellingCommand.RecruitCreature -> {
-            if (state.creatureId != command.creatureId || command.amount > state.availableTroops)
+            if (state.creatureId != command.creatureId || command.amount > state.availableCreatures)
                 emptyList()
             else
                 listOf(
                     DwellingEvent.CreatureRecruited(
                         command.creatureId,
                         command.amount,
-                        state.costPerTroop * command.amount.raw
+                        state.costPerCreature * command.amount.raw
                     )
                 )
         }
 
-        is DwellingCommand.IncreaseAvailableTroops -> listOf(
-            DwellingEvent.AvailableTroopsChanged(
+        is DwellingCommand.IncreaseAvailableCreatures -> listOf(
+            DwellingEvent.AvailableCreaturesChanged(
                 command.creatureId,
                 command.amount
             )
