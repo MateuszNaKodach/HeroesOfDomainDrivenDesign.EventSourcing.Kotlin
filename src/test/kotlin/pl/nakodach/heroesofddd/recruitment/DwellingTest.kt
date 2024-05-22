@@ -13,14 +13,14 @@ import pl.nakodach.pl.nakodach.heroesofddd.recruitment.dwelling
 import pl.nakodach.pl.nakodach.heroesofddd.shared.kernel.Amount
 import pl.nakodach.pl.nakodach.heroesofddd.shared.kernel.Cost
 import pl.nakodach.pl.nakodach.heroesofddd.shared.kernel.CreatureId
-import pl.nakodach.pl.nakodach.heroesofddd.shared.kernel.ResourceType
+import pl.nakodach.pl.nakodach.heroesofddd.shared.kernel.ResourceType.*
 
 class DwellingTest {
 
     private val angelId = CreatureId.of("Angel")
     private val archangelId = CreatureId.of("Archangel")
-    private val costPerTroop = Cost.resources(ResourceType.GOLD to 3000, ResourceType.CRYSTAL to 1)
-    private val portalOfGlory = dwelling(angelId, costPerTroop)
+    private val costPerCreature = Cost.resources(GOLD to 3000, CRYSTAL to 1)
+    private val portalOfGlory = dwelling(angelId, costPerCreature)
 
     @Test
     fun `given empty Dwelling, when recruit creature, then nothing`() {
@@ -36,7 +36,7 @@ class DwellingTest {
     }
 
     @Test
-    fun `given Dwelling with 1 troop, when recruit 1 troop, then recruited`() {
+    fun `given Dwelling with 1 creature, when recruit 1 creature, then recruited`() {
         // given
         val givenEvents = listOf(AvailableCreaturesChanged(angelId, Amount.of(1)))
 
@@ -48,13 +48,13 @@ class DwellingTest {
         val expectedRecruited = CreatureRecruited(
             angelId,
             Amount.of(1),
-            Cost.resources(ResourceType.GOLD to 3000, ResourceType.CRYSTAL to 1)
+            Cost.resources(GOLD to 3000, CRYSTAL to 1)
         )
         assertThat(thenEvents).containsExactly(expectedRecruited)
     }
 
     @Test
-    fun `given Dwelling with 4 troop, when recruit 3 troop, then recruited 2 and totalCost = costPerTroop x 3`() {
+    fun `given Dwelling with 4 creature, when recruit 3 creature, then recruited 2 and totalCost = costPerTroop x 3`() {
         // given
         val givenEvents = listOf(AvailableCreaturesChanged(angelId, Amount.of(4)))
 
@@ -66,13 +66,13 @@ class DwellingTest {
         val expectedRecruited = CreatureRecruited(
             angelId,
             Amount.of(3),
-            Cost.resources(ResourceType.GOLD to 9000, ResourceType.CRYSTAL to 3)
+            Cost.resources(GOLD to 9000, CRYSTAL to 3)
         )
         assertThat(thenEvents).containsExactly(expectedRecruited)
     }
 
     @Test
-    fun `given Dwelling with 1 troop, when recruit 2 troops, then nothing`() {
+    fun `given Dwelling with 1 creature, when recruit 2 creatures, then nothing`() {
         // given
         val givenEvents = listOf(AvailableCreaturesChanged(angelId, Amount.of(1)))
 
@@ -85,7 +85,7 @@ class DwellingTest {
     }
 
     @Test
-    fun `given Dwelling, when recruit troop not from this dwelling, then nothing`() {
+    fun `given Dwelling, when recruit creature not from this dwelling, then nothing`() {
         // given
         val givenEvents = listOf(AvailableCreaturesChanged(angelId, Amount.of(1)))
 
@@ -98,19 +98,19 @@ class DwellingTest {
     }
 
     @Test
-    fun `given Dwelling with recruited all available troops, when recruit troop, then nothing`() {
+    fun `given Dwelling with recruited all available creatures, when recruit creature, then nothing`() {
         // given
         val givenEvents = listOf(
             AvailableCreaturesChanged(angelId, Amount.of(3)),
             CreatureRecruited(
                 angelId,
                 Amount.of(2),
-                Cost.resources(ResourceType.GOLD to 6000, ResourceType.CRYSTAL to 2)
+                Cost.resources(GOLD to 6000, CRYSTAL to 2)
             ),
             CreatureRecruited(
                 angelId,
                 Amount.of(1),
-                Cost.resources(ResourceType.GOLD to 3000, ResourceType.CRYSTAL to 1)
+                Cost.resources(GOLD to 3000, CRYSTAL to 1)
             ),
         )
 
@@ -123,14 +123,14 @@ class DwellingTest {
     }
 
     @Test
-    fun `given Dwelling with recruited some available troops and 1 left, when recruit 1 troop, then recruited`() {
+    fun `given Dwelling with recruited some available creatures and 1 left, when recruit 1 creature, then recruited`() {
         // given
         val givenEvents = listOf(
             AvailableCreaturesChanged(angelId, Amount.of(4)),
             CreatureRecruited(
                 angelId,
                 Amount.of(3),
-                Cost.resources(ResourceType.GOLD to 9000, ResourceType.CRYSTAL to 3)
+                Cost.resources(GOLD to 9000, CRYSTAL to 3)
             ),
         )
 
@@ -142,12 +142,12 @@ class DwellingTest {
         val expectedEvent = CreatureRecruited(
             angelId,
             Amount.of(1),
-            Cost.resources(ResourceType.GOLD to 3000, ResourceType.CRYSTAL to 1)
+            Cost.resources(GOLD to 3000, CRYSTAL to 1)
         )
         assertThat(thenEvents).containsExactly(expectedEvent)
     }
 
-    // todo: increase available troops
+    // todo: increase available creatures
 
     private fun decide(
         givenEvents: Collection<DwellingEvent>,
@@ -158,3 +158,9 @@ class DwellingTest {
     private fun stateFrom(givenEvents: Collection<DwellingEvent>): Dwelling =
         givenEvents.fold(portalOfGlory.initialState) { state, event -> portalOfGlory.evolve(state, event) }
 }
+
+
+// jak event modeling
+// najpierw given eventy - zakladamy co sie wydarzylo przed, potem wykonujemy jakas akcje, i na sam koniec then eventy, jaki bedzie wynik operacji,
+// nie skupiamy sie na stanie - to szczegol implementacyjny, stan jest po to, zeby akcje zwracaly wlasciwy wynik, bazujac na poprzednich
+// mowimy, ze mamy siedlisko, gdzie rekrutuje sie anioly, kosztule ono tyle. Pamietacie nazwe? Portal Chwaly.
