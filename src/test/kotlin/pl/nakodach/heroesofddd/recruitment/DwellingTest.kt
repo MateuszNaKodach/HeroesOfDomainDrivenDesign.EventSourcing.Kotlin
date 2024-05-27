@@ -4,22 +4,21 @@ import assertk.assertThat
 import assertk.assertions.containsExactly
 import assertk.assertions.isEmpty
 import org.junit.jupiter.api.Test
-import pl.nakodach.pl.nakodach.heroesofddd.recruitment.Dwelling
-import pl.nakodach.pl.nakodach.heroesofddd.recruitment.DwellingCommand
+import pl.nakodach.pl.nakodach.heroesofddd.recruitment.*
 import pl.nakodach.pl.nakodach.heroesofddd.recruitment.DwellingCommand.RecruitCreature
-import pl.nakodach.pl.nakodach.heroesofddd.recruitment.DwellingEvent
 import pl.nakodach.pl.nakodach.heroesofddd.recruitment.DwellingEvent.*
-import pl.nakodach.pl.nakodach.heroesofddd.recruitment.dwelling
 import pl.nakodach.pl.nakodach.heroesofddd.shared.kernel.Amount
 import pl.nakodach.pl.nakodach.heroesofddd.shared.kernel.Cost
 import pl.nakodach.pl.nakodach.heroesofddd.shared.kernel.CreatureId
 import pl.nakodach.pl.nakodach.heroesofddd.shared.kernel.ResourceType.*
+import java.util.UUID
 
 class DwellingTest {
 
     private val angelId = CreatureId.of("Angel")
     private val archangelId = CreatureId.of("Archangel")
     private val costPerCreature = Cost.resources(GOLD to 3000, CRYSTAL to 1)
+    private val dwellingId = DwellingId.of(UUID.randomUUID().toString())
     private val portalOfGlory = dwelling(angelId, costPerCreature)
 
     @Test
@@ -28,7 +27,7 @@ class DwellingTest {
         val givenEvents = emptyList<DwellingEvent>()
 
         // when
-        val whenCommand = RecruitCreature(angelId, Amount.of(1))
+        val whenCommand = RecruitCreature(dwellingId, angelId, Amount.of(1))
 
         // then
         val thenEvents = decide(givenEvents, whenCommand)
@@ -38,14 +37,15 @@ class DwellingTest {
     @Test
     fun `given Dwelling with 1 creature, when recruit 1 creature, then recruited`() {
         // given
-        val givenEvents = listOf(AvailableCreaturesChanged(angelId, Amount.of(1)))
+        val givenEvents = listOf(AvailableCreaturesChanged(dwellingId, angelId, Amount.of(1)))
 
         // when
-        val whenCommand = RecruitCreature(angelId, Amount.of(1))
+        val whenCommand = RecruitCreature(dwellingId, angelId, Amount.of(1))
 
         // then
         val thenEvents = decide(givenEvents, whenCommand)
         val expectedRecruited = CreatureRecruited(
+            dwellingId,
             angelId,
             Amount.of(1),
             Cost.resources(GOLD to 3000, CRYSTAL to 1)
@@ -56,14 +56,15 @@ class DwellingTest {
     @Test
     fun `given Dwelling with 4 creature, when recruit 3 creature, then recruited 2 and totalCost = costPerTroop x 3`() {
         // given
-        val givenEvents = listOf(AvailableCreaturesChanged(angelId, Amount.of(4)))
+        val givenEvents = listOf(AvailableCreaturesChanged(dwellingId, angelId, Amount.of(4)))
 
         // when
-        val whenCommand = RecruitCreature(angelId, Amount.of(3))
+        val whenCommand = RecruitCreature(dwellingId, angelId, Amount.of(3))
 
         // then
         val thenEvents = decide(givenEvents, whenCommand)
         val expectedRecruited = CreatureRecruited(
+            dwellingId,
             angelId,
             Amount.of(3),
             Cost.resources(GOLD to 9000, CRYSTAL to 3)
@@ -74,10 +75,10 @@ class DwellingTest {
     @Test
     fun `given Dwelling with 1 creature, when recruit 2 creatures, then nothing`() {
         // given
-        val givenEvents = listOf(AvailableCreaturesChanged(angelId, Amount.of(1)))
+        val givenEvents = listOf(AvailableCreaturesChanged(dwellingId, angelId, Amount.of(1)))
 
         // when
-        val whenCommand = RecruitCreature(angelId, Amount.of(2))
+        val whenCommand = RecruitCreature(dwellingId, angelId, Amount.of(2))
 
         // then
         val thenEvents = decide(givenEvents, whenCommand)
@@ -87,10 +88,10 @@ class DwellingTest {
     @Test
     fun `given Dwelling, when recruit creature not from this dwelling, then nothing`() {
         // given
-        val givenEvents = listOf(AvailableCreaturesChanged(angelId, Amount.of(1)))
+        val givenEvents = listOf(AvailableCreaturesChanged(dwellingId, angelId, Amount.of(1)))
 
         // when
-        val whenCommand = RecruitCreature(archangelId, Amount.of(1))
+        val whenCommand = RecruitCreature(dwellingId, archangelId, Amount.of(1))
 
         // then
         val thenEvents = decide(givenEvents, whenCommand)
@@ -101,13 +102,15 @@ class DwellingTest {
     fun `given Dwelling with recruited all available creatures, when recruit creature, then nothing`() {
         // given
         val givenEvents = listOf(
-            AvailableCreaturesChanged(angelId, Amount.of(3)),
+            AvailableCreaturesChanged(dwellingId, angelId, Amount.of(3)),
             CreatureRecruited(
+                dwellingId,
                 angelId,
                 Amount.of(2),
                 Cost.resources(GOLD to 6000, CRYSTAL to 2)
             ),
             CreatureRecruited(
+                dwellingId,
                 angelId,
                 Amount.of(1),
                 Cost.resources(GOLD to 3000, CRYSTAL to 1)
@@ -115,7 +118,7 @@ class DwellingTest {
         )
 
         // when
-        val whenCommand = RecruitCreature(archangelId, Amount.of(1))
+        val whenCommand = RecruitCreature(dwellingId, archangelId, Amount.of(1))
 
         // then
         val thenEvents = decide(givenEvents, whenCommand)
@@ -126,8 +129,9 @@ class DwellingTest {
     fun `given Dwelling with recruited some available creatures and 1 left, when recruit 1 creature, then recruited`() {
         // given
         val givenEvents = listOf(
-            AvailableCreaturesChanged(angelId, Amount.of(4)),
+            AvailableCreaturesChanged(dwellingId, angelId, Amount.of(4)),
             CreatureRecruited(
+                dwellingId,
                 angelId,
                 Amount.of(3),
                 Cost.resources(GOLD to 9000, CRYSTAL to 3)
@@ -135,11 +139,12 @@ class DwellingTest {
         )
 
         // when
-        val whenCommand = RecruitCreature(angelId, Amount.of(1))
+        val whenCommand = RecruitCreature(dwellingId, angelId, Amount.of(1))
 
         // then
         val thenEvents = decide(givenEvents, whenCommand)
         val expectedEvent = CreatureRecruited(
+            dwellingId,
             angelId,
             Amount.of(1),
             Cost.resources(GOLD to 3000, CRYSTAL to 1)

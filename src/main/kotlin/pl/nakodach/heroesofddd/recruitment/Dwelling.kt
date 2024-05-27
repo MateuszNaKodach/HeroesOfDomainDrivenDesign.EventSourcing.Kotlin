@@ -34,13 +34,14 @@ import pl.nakodach.pl.nakodach.shared.buildingblocks.domain.IDecider
 
 
 sealed class DwellingCommand {
-    data class RecruitCreature(val creatureId: CreatureId, val amount: Amount) : DwellingCommand()
-    data class IncreaseAvailableCreatures(val creatureId: CreatureId, val amount: Amount) : DwellingCommand()
+    data class RecruitCreature(val dwellingId: DwellingId, val creatureId: CreatureId, val amount: Amount) : DwellingCommand()
+    data class IncreaseAvailableCreatures(val dwellingId: DwellingId, val creatureId: CreatureId, val amount: Amount) : DwellingCommand()
 }
 
 sealed class DwellingEvent {
-    data class CreatureRecruited(val creatureId: CreatureId, val amount: Amount, val totalCost: Cost) : DwellingEvent()
-    data class AvailableCreaturesChanged(val creatureId: CreatureId, val changedTo: Amount) : DwellingEvent()
+//    data class DwellingBuilt(val dwellingId: DwellingId, val creatureId: CreatureId, val costPerCreature: Cost) : DwellingEvent()
+    data class CreatureRecruited(val dwellingId: DwellingId, val creatureId: CreatureId, val amount: Amount, val totalCost: Cost) : DwellingEvent()
+    data class AvailableCreaturesChanged(val dwellingId: DwellingId, val creatureId: CreatureId, val changedTo: Amount) : DwellingEvent()
 }
 
 data class Dwelling(val creatureId: CreatureId, val costPerCreature: Cost, val availableCreatures: Amount)
@@ -64,6 +65,7 @@ private fun decide(command: DwellingCommand, state: Dwelling): List<DwellingEven
             else
                 listOf(
                     DwellingEvent.CreatureRecruited(
+                        command.dwellingId,
                         command.creatureId,
                         command.amount,
                         state.costPerCreature * command.amount.raw
@@ -73,6 +75,7 @@ private fun decide(command: DwellingCommand, state: Dwelling): List<DwellingEven
 
         is DwellingCommand.IncreaseAvailableCreatures -> listOf(
             DwellingEvent.AvailableCreaturesChanged(
+                command.dwellingId,
                 command.creatureId,
                 command.amount
             )
