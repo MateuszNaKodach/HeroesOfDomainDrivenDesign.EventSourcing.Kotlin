@@ -99,6 +99,27 @@ class DwellingTest {
     }
 
     @Test
+    fun `given Dwelling with recruited all available creatures at once, when recruit creature, then nothing`() {
+        // given
+        val givenEvents = listOf(
+            AvailableCreaturesChanged(dwellingId, angelId, Amount.of(3)),
+            CreatureRecruited(
+                dwellingId,
+                angelId,
+                Amount.of(3),
+                Cost.resources(GOLD to 9000, CRYSTAL to 3)
+            ),
+        )
+
+        // when
+        val whenCommand = RecruitCreature(dwellingId, archangelId, Amount.of(1))
+
+        // then
+        val thenEvents = decide(givenEvents, whenCommand)
+        assertThat(thenEvents).isEmpty()
+    }
+
+    @Test
     fun `given Dwelling with recruited all available creatures, when recruit creature, then nothing`() {
         // given
         val givenEvents = listOf(
