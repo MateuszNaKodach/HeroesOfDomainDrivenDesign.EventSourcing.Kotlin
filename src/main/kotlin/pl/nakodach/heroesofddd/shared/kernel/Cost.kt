@@ -10,6 +10,7 @@ data class Cost(private val resources: Map<ResourceType, Amount>) {
     }
 
     operator fun times(multiplier: Int): Cost = Cost(resources.mapValues { Amount(it.value.raw * multiplier) })
+    operator fun times(amount: Amount): Cost = times(amount.raw)
 }
 
 data class Amount(val raw: Int) {

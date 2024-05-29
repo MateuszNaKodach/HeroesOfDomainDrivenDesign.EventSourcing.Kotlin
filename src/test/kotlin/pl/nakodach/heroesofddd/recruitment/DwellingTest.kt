@@ -54,7 +54,7 @@ class DwellingTest {
     }
 
     @Test
-    fun `given Dwelling with 4 creature, when recruit 3 creature, then recruited 2 and totalCost = costPerTroop x 3`() {
+    fun `given Dwelling with 4 creature, when recruit 3 creature, then recruited 3 and totalCost = costPerTroop x 3`() {
         // given
         val givenEvents = listOf(AvailableCreaturesChanged(dwellingId, angelId, Amount.of(4)))
 
@@ -71,6 +71,26 @@ class DwellingTest {
         )
         assertThat(thenEvents).containsExactly(expectedRecruited)
     }
+
+    @Test
+    fun `given Dwelling with 2 creatures, when recruit 2 creatures, then recruited 2 and totalCost = costPerTroop x 2`() {
+        // given
+        val givenEvents = listOf(AvailableCreaturesChanged(dwellingId, angelId, Amount.of(2)))
+
+        // when
+        val whenCommand = RecruitCreature(dwellingId, angelId, Amount.of(2))
+
+        // then
+        val thenEvents = decide(givenEvents, whenCommand)
+        val expectedRecruited = CreatureRecruited(
+            dwellingId,
+            angelId,
+            Amount.of(2),
+            Cost.resources(GOLD to 6000, CRYSTAL to 2)
+        )
+        assertThat(thenEvents).containsExactly(expectedRecruited)
+    }
+
 
     @Test
     fun `given Dwelling with 1 creature, when recruit 2 creatures, then nothing`() {
