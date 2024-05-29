@@ -17,9 +17,9 @@ class DwellingTest {
 
     private val angelId = CreatureId.of("Angel")
     private val archangelId = CreatureId.of("Archangel")
-    private val costPerCreature = Cost.resources(GOLD to 3000, CRYSTAL to 1)
+    private val costPerTroop = Cost.resources(GOLD to 3000, CRYSTAL to 1)
     private val dwellingId = DwellingId.of(UUID.randomUUID().toString())
-    private val portalOfGlory = dwelling(angelId, costPerCreature)
+    private val portalOfGlory = dwelling(angelId, costPerTroop)
 
     @Test
     fun `given empty Dwelling, when recruit creature, then nothing`() {
@@ -75,18 +75,18 @@ class DwellingTest {
     @Test
     fun `given Dwelling with 2 creatures, when recruit 2 creatures, then recruited 2 and totalCost = costPerTroop x 2`() {
         // given
-        val givenEvents = listOf(AvailableCreaturesChanged(dwellingId, angelId, Amount.of(2)))
+        val givenEvents = listOf(AvailableCreaturesChanged(dwellingId, angelId, changedTo = Amount.of(2)))
 
         // when
-        val whenCommand = RecruitCreature(dwellingId, angelId, Amount.of(2))
+        val whenCommand = RecruitCreature(dwellingId, angelId, recruit = Amount.of(2))
 
         // then
         val thenEvents = decide(givenEvents, whenCommand)
         val expectedRecruited = CreatureRecruited(
             dwellingId,
             angelId,
-            Amount.of(2),
-            Cost.resources(GOLD to 6000, CRYSTAL to 2)
+            recruited = Amount.of(2),
+            totalCost = Cost.resources(GOLD to 6000, CRYSTAL to 2)
         )
         assertThat(thenEvents).containsExactly(expectedRecruited)
     }
@@ -170,12 +170,12 @@ class DwellingTest {
     fun `given Dwelling with recruited some available creatures and 1 left, when recruit 1 creature, then recruited`() {
         // given
         val givenEvents = listOf(
-            AvailableCreaturesChanged(dwellingId, angelId, Amount.of(4)),
+            AvailableCreaturesChanged(dwellingId, angelId, changedTo = Amount.of(4)),
             CreatureRecruited(
                 dwellingId,
                 angelId,
-                Amount.of(3),
-                Cost.resources(GOLD to 9000, CRYSTAL to 3)
+                recruited = Amount.of(3),
+                totalCost = Cost.resources(GOLD to 9000, CRYSTAL to 3)
             ),
         )
 
@@ -187,8 +187,8 @@ class DwellingTest {
         val expectedEvent = CreatureRecruited(
             dwellingId,
             angelId,
-            Amount.of(1),
-            Cost.resources(GOLD to 3000, CRYSTAL to 1)
+            recruited = Amount.of(1),
+            totalCost = Cost.resources(GOLD to 3000, CRYSTAL to 1)
         )
         assertThat(thenEvents).containsExactly(expectedEvent)
     }
