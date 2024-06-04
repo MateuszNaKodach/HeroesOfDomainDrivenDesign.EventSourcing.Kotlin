@@ -32,7 +32,8 @@ class DwellingTest {
 
         // then
         val thenEvents = decide(givenEvents, whenCommand)
-        assertThat(thenEvents).containsExactly(DwellingBuilt(dwellingId, angelId, angelCostPerTroop))
+        val expectedEvent = DwellingBuilt(dwellingId, angelId, angelCostPerTroop)
+        assertThat(thenEvents).containsExactly(expectedEvent)
     }
 
     @Test
@@ -232,7 +233,21 @@ class DwellingTest {
         assertThat(thenEvents).containsExactly(expectedEvent)
     }
 
-    // todo: increase available creatures
+    @Test
+    fun `given build Dwelling, when increase available creatures, then available creatures changed`() {
+        // given
+        val givenEvents = listOf(
+            DwellingBuilt(dwellingId, angelId, angelCostPerTroop)
+        )
+
+        // when
+        val whenCommand = IncreaseAvailableCreatures(dwellingId, angelId, Amount.of(3))
+
+        // then
+        val thenEvents = decide(givenEvents, whenCommand)
+        val expectedEvent = AvailableCreaturesChanged(dwellingId, angelId, changedTo = Amount.of(3))
+        assertThat(thenEvents).containsExactly(expectedEvent)
+    }
 
     private fun decide(
         givenEvents: Collection<DwellingEvent>, whenCommand: DwellingCommand
