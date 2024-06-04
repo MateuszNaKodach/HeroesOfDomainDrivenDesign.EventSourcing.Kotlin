@@ -6,20 +6,21 @@ import assertk.assertions.isEmpty
 import org.junit.jupiter.api.Test
 import pl.nakodach.pl.nakodach.heroesofddd.recruitment.*
 import pl.nakodach.pl.nakodach.heroesofddd.recruitment.DwellingCommand.RecruitCreature
-import pl.nakodach.pl.nakodach.heroesofddd.recruitment.DwellingEvent.*
+import pl.nakodach.pl.nakodach.heroesofddd.recruitment.DwellingEvent.AvailableCreaturesChanged
+import pl.nakodach.pl.nakodach.heroesofddd.recruitment.DwellingEvent.CreatureRecruited
 import pl.nakodach.pl.nakodach.heroesofddd.shared.kernel.Amount
-import pl.nakodach.pl.nakodach.heroesofddd.shared.kernel.Cost
+import pl.nakodach.pl.nakodach.heroesofddd.shared.kernel.Cost.Companion.resources
 import pl.nakodach.pl.nakodach.heroesofddd.shared.kernel.CreatureId
-import pl.nakodach.pl.nakodach.heroesofddd.shared.kernel.ResourceType.*
-import java.util.UUID
+import pl.nakodach.pl.nakodach.heroesofddd.shared.kernel.ResourceType.CRYSTAL
+import pl.nakodach.pl.nakodach.heroesofddd.shared.kernel.ResourceType.GOLD
+import java.util.*
 
 class DwellingTest {
 
     private val angelId = CreatureId.of("Angel")
     private val archangelId = CreatureId.of("Archangel")
-    private val costPerTroop = Cost.resources(GOLD to 3000, CRYSTAL to 1)
     private val dwellingId = DwellingId.of(UUID.randomUUID().toString())
-    private val portalOfGlory = dwelling(angelId, costPerTroop)
+    private val portalOfGlory = dwelling(angelId, costPerTroop = resources(GOLD to 3000, CRYSTAL to 1))
 
     @Test
     fun `given empty Dwelling, when recruit creature, then nothing`() {
@@ -48,7 +49,7 @@ class DwellingTest {
             dwellingId,
             angelId,
             Amount.of(1),
-            Cost.resources(GOLD to 3000, CRYSTAL to 1)
+            resources(GOLD to 3000, CRYSTAL to 1)
         )
         assertThat(thenEvents).containsExactly(expectedRecruited)
     }
@@ -67,7 +68,7 @@ class DwellingTest {
             dwellingId,
             angelId,
             Amount.of(3),
-            Cost.resources(GOLD to 9000, CRYSTAL to 3)
+            resources(GOLD to 9000, CRYSTAL to 3)
         )
         assertThat(thenEvents).containsExactly(expectedRecruited)
     }
@@ -86,7 +87,7 @@ class DwellingTest {
             dwellingId,
             angelId,
             recruited = Amount.of(2),
-            totalCost = Cost.resources(GOLD to 6000, CRYSTAL to 2)
+            totalCost = resources(GOLD to 6000, CRYSTAL to 2)
         )
         assertThat(thenEvents).containsExactly(expectedRecruited)
     }
@@ -127,7 +128,7 @@ class DwellingTest {
                 dwellingId,
                 angelId,
                 Amount.of(3),
-                Cost.resources(GOLD to 9000, CRYSTAL to 3)
+                resources(GOLD to 9000, CRYSTAL to 3)
             ),
         )
 
@@ -148,13 +149,13 @@ class DwellingTest {
                 dwellingId,
                 angelId,
                 Amount.of(2),
-                Cost.resources(GOLD to 6000, CRYSTAL to 2)
+                resources(GOLD to 6000, CRYSTAL to 2)
             ),
             CreatureRecruited(
                 dwellingId,
                 angelId,
                 Amount.of(1),
-                Cost.resources(GOLD to 3000, CRYSTAL to 1)
+                resources(GOLD to 3000, CRYSTAL to 1)
             ),
         )
 
@@ -175,7 +176,7 @@ class DwellingTest {
                 dwellingId,
                 angelId,
                 recruited = Amount.of(3),
-                totalCost = Cost.resources(GOLD to 9000, CRYSTAL to 3)
+                totalCost = resources(GOLD to 9000, CRYSTAL to 3)
             ),
         )
 
@@ -188,7 +189,7 @@ class DwellingTest {
             dwellingId,
             angelId,
             recruited = Amount.of(1),
-            totalCost = Cost.resources(GOLD to 3000, CRYSTAL to 1)
+            totalCost = resources(GOLD to 3000, CRYSTAL to 1)
         )
         assertThat(thenEvents).containsExactly(expectedEvent)
     }
