@@ -241,9 +241,3 @@ class DwellingTest {
     private fun stateFrom(givenEvents: Collection<DwellingEvent>): Dwelling =
         givenEvents.fold(dwelling.initialState) { state, event -> dwelling.evolve(state, event) }
 }
-
-
-// jak event modeling
-// najpierw given eventy - zakladamy co sie wydarzylo przed, potem wykonujemy jakas akcje, i na sam koniec then eventy, jaki bedzie wynik operacji,
-// nie skupiamy sie na stanie - to szczegol implementacyjny, stan jest po to, zeby akcje zwracaly wlasciwy wynik, bazujac na poprzednich
-// mowimy, ze mamy siedlisko, gdzie rekrutuje sie anioly, kosztule ono tyle. Pamietacie nazwe? Portal Chwaly.
