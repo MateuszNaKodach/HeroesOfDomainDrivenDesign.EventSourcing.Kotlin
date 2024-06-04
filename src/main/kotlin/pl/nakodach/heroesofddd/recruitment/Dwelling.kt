@@ -56,7 +56,12 @@ sealed interface DwellingEvent {
 
 sealed interface Dwelling {
     data object NotBuilt : Dwelling;
-    data class Built(val creatureId: CreatureId, val costPerTroop: Cost, val availableCreatures: Amount) : Dwelling;
+    data class Built(
+        val dwellingId: DwellingId,
+        val creatureId: CreatureId,
+        val costPerTroop: Cost,
+        val availableCreatures: Amount
+    ) : Dwelling;
 }
 
 fun dwelling(): IDecider<DwellingCommand, Dwelling, DwellingEvent> = Decider(
@@ -64,7 +69,7 @@ fun dwelling(): IDecider<DwellingCommand, Dwelling, DwellingEvent> = Decider(
     evolve = { state, event ->
         when (state) {
             NotBuilt -> when (event) {
-                is DwellingBuilt -> Built(event.creatureId, event.costPerTroop, Amount.zero())
+                is DwellingBuilt -> Built(event.dwellingId, event.creatureId, event.costPerTroop, Amount.zero())
                 else -> state
             }
 
@@ -81,43 +86,51 @@ fun dwelling(): IDecider<DwellingCommand, Dwelling, DwellingEvent> = Decider(
 private fun decide(command: DwellingCommand, state: Dwelling): List<DwellingEvent> =
     when (state) {
         NotBuilt -> when (command) {
-            is BuildDwelling -> listOf(
-                DwellingBuilt(
-                    command.dwellingId,
-                    command.creatureId,
-                    command.costPerTroop
-                )
-            )
-
+            is BuildDwelling -> whenCommand(command)
             else -> emptyList()
         }
 
         is Built -> when (command) {
-            is RecruitCreature -> {
-                if (state.creatureId != command.creatureId || command.recruit > state.availableCreatures)
-                    emptyList()
-                else
-                    listOf(
-                        CreatureRecruited(
-                            command.dwellingId,
-                            command.creatureId,
-                            command.recruit,
-                            state.costPerTroop * command.recruit
-                        )
-                    )
-            }
-
-            is IncreaseAvailableCreatures -> listOf(
-                AvailableCreaturesChanged(
-                    command.dwellingId,
-                    command.creatureId,
-                    command.available
-                )
-            )
-
+            is RecruitCreature -> whenCommand(state, command)
+            is IncreaseAvailableCreatures -> whenCommand(state, command)
             else -> emptyList()
         }
     }
+
+private fun whenCommand(command: BuildDwelling) =
+    listOf(
+        DwellingBuilt(
+            command.dwellingId,
+            command.creatureId,
+            command.costPerTroop
+        )
+    )
+
+private fun whenCommand(
+    state: Built,
+    command: RecruitCreature
+) = if (state.creatureId != command.creatureId || command.recruit > state.availableCreatures)
+    emptyList()
+else
+    listOf(
+        CreatureRecruited(
+            command.dwellingId,
+            command.creatureId,
+            command.recruit,
+            state.costPerTroop * command.recruit
+        )
+    )
+
+private fun whenCommand(
+    state: Built,
+    command: IncreaseAvailableCreatures
+) = listOf(
+    AvailableCreaturesChanged(
+        state.dwellingId,
+        state.creatureId,
+        command.available
+    )
+)
 
 //todo; event built musi byc, mozna state wproadzic, budynek wybudowany, nie wybudowany
 //zmienic nazwy jak na ui, costPerTroop itp.
