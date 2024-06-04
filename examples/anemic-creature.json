@@ -1,0 +1,43 @@
+{
+  "id": "Angel",
+  "level": 7,
+
+  "faction": "castle",
+  "growth": 1,
+  "upgrades": [
+    "Archangels"
+  ],
+  "cost": {
+    "gold": 3000,
+    "crystal": 1,
+    "wood": 0,
+    "ore": 0,
+    "sulfur": 0,
+    "mercury": 0,
+    "gems": 0
+  },
+  "attack": 20,
+  "defense": 20,
+  "damage": {
+    "low": 30,
+    "high": 50
+  },
+  "health": 200,
+  "speed": 12,
+  "shots": 0,
+  "size": 1,
+  "spells": [],
+  "abilities": [
+    {
+      "type": "HATE",
+      "creatures": [
+        "Devil",
+        "ArchDevil"
+      ]
+    },
+    {
+      "type": "ConstRaisesMorale",
+      "amount": 1
+    }
+  ]
+}
