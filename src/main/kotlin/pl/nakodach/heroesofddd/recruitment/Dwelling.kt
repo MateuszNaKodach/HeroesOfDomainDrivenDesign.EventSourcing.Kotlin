@@ -27,7 +27,7 @@ sealed interface DwellingCommand {
     data class IncreaseAvailableCreatures(
         override val dwellingId: DwellingId,
         val creatureId: CreatureId,
-        val available: Amount
+        val increaseBy: Amount
     ) : DwellingCommand
 }
 
@@ -128,7 +128,7 @@ private fun whenCommand(
     AvailableCreaturesChanged(
         state.dwellingId,
         state.creatureId,
-        command.available
+        command.increaseBy
     )
 )
 
