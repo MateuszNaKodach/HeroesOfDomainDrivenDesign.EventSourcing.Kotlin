@@ -1,5 +1,6 @@
 package pl.nakodach.pl.nakodach.heroesofddd.recruitment
 
+import pl.nakodach.pl.nakodach.heroesofddd.armies.ArmyId
 import pl.nakodach.pl.nakodach.heroesofddd.recruitment.Dwelling.*
 import pl.nakodach.pl.nakodach.heroesofddd.recruitment.DwellingCommand.*
 import pl.nakodach.pl.nakodach.heroesofddd.recruitment.DwellingEvent.*
@@ -21,7 +22,8 @@ sealed interface DwellingCommand {
     data class RecruitCreature(
         override val dwellingId: DwellingId,
         val creatureId: CreatureId,
-        val recruit: Amount
+        val recruit: Amount,
+        val armyId: ArmyId // to: ArmyId
     ) : DwellingCommand
 
     data class IncreaseAvailableCreatures(
@@ -44,7 +46,8 @@ sealed interface DwellingEvent {
         override val dwellingId: DwellingId,
         val creatureId: CreatureId,
         val recruited: Amount,
-        val totalCost: Cost
+        val totalCost: Cost,
+        val armyId: ArmyId
     ) : DwellingEvent
 
     data class AvailableCreaturesChanged(
@@ -117,7 +120,8 @@ else
             command.dwellingId,
             command.creatureId,
             command.recruit,
-            state.costPerTroop * command.recruit
+            state.costPerTroop * command.recruit,
+            command.armyId
         )
     )
 
@@ -131,6 +135,3 @@ private fun whenCommand(
         command.increaseBy
     )
 )
-
-//todo; event built musi byc, mozna state wproadzic, budynek wybudowany, nie wybudowany
-//zmienic nazwy jak na ui, costPerTroop itp.
