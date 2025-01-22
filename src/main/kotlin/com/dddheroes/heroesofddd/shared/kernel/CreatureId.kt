@@ -1,4 +1,4 @@
-package pl.nakodach.pl.nakodach.heroesofddd.shared.kernel
+package com.dddheroes.heroesofddd.shared.kernel
 
 data class CreatureId private constructor(val raw: String) {
 

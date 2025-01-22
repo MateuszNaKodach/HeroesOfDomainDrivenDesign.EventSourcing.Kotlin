@@ -1,4 +1,4 @@
-package pl.nakodach.pl.nakodach.shared.buildingblocks.domain
+package com.dddheroes.shared.buildingblocks.domain
 
 interface IDecider<in C, S, E> {
     val decide: Decide<C, S, E>

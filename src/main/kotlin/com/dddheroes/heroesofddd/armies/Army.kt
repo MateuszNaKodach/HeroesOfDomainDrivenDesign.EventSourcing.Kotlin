@@ -1,7 +1,7 @@
-import pl.nakodach.pl.nakodach.heroesofddd.armies.ArmyId
-import pl.nakodach.pl.nakodach.heroesofddd.recruitment.DwellingId
-import pl.nakodach.pl.nakodach.heroesofddd.shared.kernel.Amount
-import pl.nakodach.pl.nakodach.heroesofddd.shared.kernel.CreatureId
+import com.dddheroes.heroesofddd.armies.ArmyId
+import com.dddheroes.heroesofddd.recruitment.DwellingId
+import com.dddheroes.heroesofddd.shared.kernel.Amount
+import com.dddheroes.heroesofddd.shared.kernel.CreatureId
 
 sealed interface ArmyCommand {
     val armyId: ArmyId
