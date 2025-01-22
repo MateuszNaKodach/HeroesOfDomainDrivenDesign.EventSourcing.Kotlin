@@ -26,15 +26,17 @@ dependencies {
 
     // Spring Boot
     implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     // Axon Framework
-    implementation("org.axonframework:axon-spring-boot-starter:$axonVersion")
-    implementation("org.axonframework:axon-modelling:$axonVersion")
-    testImplementation("org.axonframework:axon-test:$axonVersion")
+    implementation(platform("org.axonframework:axon-bom:$axonVersion"))
+    implementation("org.axonframework:axon-spring-boot-starter")
+    implementation("org.axonframework:axon-modelling")
+    testImplementation("org.axonframework:axon-test")
 }
 
 java {
