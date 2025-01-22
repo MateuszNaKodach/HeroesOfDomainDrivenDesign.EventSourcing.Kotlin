@@ -1,4 +1,4 @@
-package pl.nakodach.pl.nakodach.heroesofddd.shared.kernel
+package pl.nakodach.heroesofddd.shared.kernel
 
 enum class ResourceType {
     GOLD,

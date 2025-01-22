@@ -1,4 +1,4 @@
-package pl.nakodach.pl.nakodach.heroesofddd.recruitment
+package pl.nakodach.heroesofddd.recruitment
 
 import ArmyCommand
 

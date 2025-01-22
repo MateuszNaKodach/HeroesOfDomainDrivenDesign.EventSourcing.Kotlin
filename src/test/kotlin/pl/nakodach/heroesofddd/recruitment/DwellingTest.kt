@@ -4,15 +4,15 @@ import assertk.assertThat
 import assertk.assertions.containsExactly
 import assertk.assertions.isEmpty
 import org.junit.jupiter.api.Test
-import pl.nakodach.pl.nakodach.heroesofddd.armies.ArmyId
-import pl.nakodach.pl.nakodach.heroesofddd.recruitment.*
-import pl.nakodach.pl.nakodach.heroesofddd.recruitment.DwellingCommand.*
-import pl.nakodach.pl.nakodach.heroesofddd.recruitment.DwellingEvent.*
-import pl.nakodach.pl.nakodach.heroesofddd.shared.kernel.Amount
-import pl.nakodach.pl.nakodach.heroesofddd.shared.kernel.Cost.Companion.resources
-import pl.nakodach.pl.nakodach.heroesofddd.shared.kernel.CreatureId
-import pl.nakodach.pl.nakodach.heroesofddd.shared.kernel.ResourceType.CRYSTAL
-import pl.nakodach.pl.nakodach.heroesofddd.shared.kernel.ResourceType.GOLD
+import pl.nakodach.heroesofddd.armies.ArmyId
+import pl.nakodach.heroesofddd.recruitment.*
+import pl.nakodach.heroesofddd.recruitment.DwellingCommand.*
+import pl.nakodach.heroesofddd.recruitment.DwellingEvent.*
+import pl.nakodach.heroesofddd.shared.kernel.Amount
+import pl.nakodach.heroesofddd.shared.kernel.Cost.Companion.resources
+import pl.nakodach.heroesofddd.shared.kernel.CreatureId
+import pl.nakodach.heroesofddd.shared.kernel.ResourceType.CRYSTAL
+import pl.nakodach.heroesofddd.shared.kernel.ResourceType.GOLD
 import java.util.*
 
 class DwellingTest {
