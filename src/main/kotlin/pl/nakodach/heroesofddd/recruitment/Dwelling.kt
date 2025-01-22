@@ -132,6 +132,6 @@ private fun whenCommand(
     AvailableCreaturesChanged(
         state.dwellingId,
         state.creatureId,
-        command.increaseBy
+        command.increaseBy // todo: error!
     )
 )
