@@ -14,6 +14,12 @@ dependencies {
     testImplementation("com.willowtreeapps.assertk:assertk:0.28.1")
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(23))
+    }
+}
+
 tasks.test {
     useJUnitPlatform()
 }
