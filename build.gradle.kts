@@ -24,7 +24,7 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation("com.willowtreeapps.assertk:assertk:$assertkVersion")
 
-    // Spring Boot
+    // - Spring Boot
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -32,11 +32,19 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    // Axon Framework
+    // - Axon Framework
     implementation(platform("org.axonframework:axon-bom:$axonVersion"))
-    implementation("org.axonframework:axon-spring-boot-starter")
     implementation("org.axonframework:axon-modelling")
     testImplementation("org.axonframework:axon-test")
+
+    // ---- if (use Axon Framework Spring Boot Starter) ----
+    implementation("org.axonframework:axon-spring-boot-starter")
+    // ---- else ----
+    // implementation("org.axonframework:axon-configuration")
+    // implementation("org.axonframework:axon-server-connector")
+    // testImplementation("org.axonframework:axon-test")
+    // ---- endif -----
+
 }
 
 java {
