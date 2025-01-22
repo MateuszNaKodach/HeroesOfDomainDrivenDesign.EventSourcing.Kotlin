@@ -12,16 +12,29 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    testImplementation(kotlin("test"))
-    testImplementation("com.willowtreeapps.assertk:assertk:0.28.1")
+ext {
+    set("axonVersion", "4.10.3")
+    set("assertkVersion", "0.28.1")
+}
 
-    // Spring Boot dependencies
+dependencies {
+    val axonVersion: String by project
+    val assertkVersion: String by project
+
+    testImplementation(kotlin("test"))
+    testImplementation("com.willowtreeapps.assertk:assertk:$assertkVersion")
+
+    // Spring Boot
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    // Axon Framework
+    implementation("org.axonframework:axon-spring-boot-starter:$axonVersion")
+    implementation("org.axonframework:axon-modelling:$axonVersion")
+    testImplementation("org.axonframework:axon-test:$axonVersion")
 }
 
 java {

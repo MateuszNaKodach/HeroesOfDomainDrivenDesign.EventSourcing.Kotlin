@@ -7,3 +7,6 @@ spring:
 axon:
   serializer:
     general: jackson
+  axonserver:
+    event-store:
+      enabled: false
