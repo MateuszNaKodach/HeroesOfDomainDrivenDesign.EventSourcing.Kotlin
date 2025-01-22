@@ -1,4 +1,4 @@
-package pl.nakodach.shared.buildingblocks.domain
+package com.dddheroes.shared.buildingblocks.domain
 
 typealias Decide<C, S, E> = (command: C, state: S) -> List<E>
 typealias Evolve<S, E> = (state: S, event: E) -> S

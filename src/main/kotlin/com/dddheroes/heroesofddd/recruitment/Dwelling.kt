@@ -1,14 +1,14 @@
-package pl.nakodach.heroesofddd.recruitment
+package com.dddheroes.heroesofddd.recruitment
 
-import pl.nakodach.heroesofddd.armies.ArmyId
-import pl.nakodach.heroesofddd.recruitment.Dwelling.*
-import pl.nakodach.heroesofddd.recruitment.DwellingCommand.*
-import pl.nakodach.heroesofddd.recruitment.DwellingEvent.*
-import pl.nakodach.heroesofddd.shared.kernel.Amount
-import pl.nakodach.heroesofddd.shared.kernel.Cost
-import pl.nakodach.heroesofddd.shared.kernel.CreatureId
-import pl.nakodach.shared.buildingblocks.domain.Decider
-import pl.nakodach.shared.buildingblocks.domain.IDecider
+import com.dddheroes.heroesofddd.armies.ArmyId
+import com.dddheroes.heroesofddd.recruitment.Dwelling.*
+import com.dddheroes.heroesofddd.recruitment.DwellingCommand.*
+import com.dddheroes.heroesofddd.recruitment.DwellingEvent.*
+import com.dddheroes.heroesofddd.shared.kernel.Amount
+import com.dddheroes.heroesofddd.shared.kernel.Cost
+import com.dddheroes.heroesofddd.shared.kernel.CreatureId
+import com.dddheroes.shared.buildingblocks.domain.Decider
+import com.dddheroes.shared.buildingblocks.domain.IDecider
 
 sealed interface DwellingCommand {
     val dwellingId: DwellingId

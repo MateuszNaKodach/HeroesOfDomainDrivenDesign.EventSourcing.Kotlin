@@ -1,4 +1,4 @@
-package pl.nakodach.heroesofddd.armies
+package com.dddheroes.heroesofddd.armies
 
 data class ArmyId private constructor(val raw: String) {
 

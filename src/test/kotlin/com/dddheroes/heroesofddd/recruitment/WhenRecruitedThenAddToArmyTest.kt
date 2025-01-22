@@ -1,17 +1,17 @@
-package pl.nakodach.heroesofddd.recruitment
+package com.dddheroes.heroesofddd.recruitment
 
 import assertk.assertThat
 import assertk.assertions.containsExactly
 import assertk.assertions.isEmpty
 import org.junit.jupiter.api.Test
-import pl.nakodach.heroesofddd.armies.ArmyId
-import pl.nakodach.heroesofddd.recruitment.*
-import pl.nakodach.heroesofddd.recruitment.DwellingEvent.*
-import pl.nakodach.heroesofddd.shared.kernel.Amount
-import pl.nakodach.heroesofddd.shared.kernel.Cost.Companion.resources
-import pl.nakodach.heroesofddd.shared.kernel.CreatureId
-import pl.nakodach.heroesofddd.shared.kernel.ResourceType.GOLD
-import pl.nakodach.heroesofddd.shared.kernel.ResourceType.CRYSTAL
+import com.dddheroes.heroesofddd.armies.ArmyId
+import com.dddheroes.heroesofddd.recruitment.*
+import com.dddheroes.heroesofddd.recruitment.DwellingEvent.*
+import com.dddheroes.heroesofddd.shared.kernel.Amount
+import com.dddheroes.heroesofddd.shared.kernel.Cost.Companion.resources
+import com.dddheroes.heroesofddd.shared.kernel.CreatureId
+import com.dddheroes.heroesofddd.shared.kernel.ResourceType.GOLD
+import com.dddheroes.heroesofddd.shared.kernel.ResourceType.CRYSTAL
 import java.util.*
 
 class WhenRecruitedThenAddToArmyTest {
