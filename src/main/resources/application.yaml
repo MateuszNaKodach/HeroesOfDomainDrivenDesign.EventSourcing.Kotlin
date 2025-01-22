@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: heroes-of-ddd
+  threads:
+    virtual:
+      enabled: true
+axon:
+  serializer:
+    general: jackson
+  axonserver:
+    event-store:
+      enabled: false
