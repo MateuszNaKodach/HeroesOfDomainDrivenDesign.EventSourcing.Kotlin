@@ -1,11 +1,11 @@
 package com.dddheroes.heroesofddd.recruitment
 
-import com.dddheroes.axonextension.AbstractAggregate
+import com.dddheroes.axonframework.DeciderAggregate
 import org.axonframework.commandhandling.CommandHandler
 import org.axonframework.spring.stereotype.Aggregate
 
 @Aggregate(commandTargetResolver = "metaDataCommandTargetResolver")
-class DwellingAggregate : AbstractAggregate<DwellingCommand, Dwelling, DwellingEvent> {
+class DwellingAggregate : DeciderAggregate<DwellingCommand, Dwelling, DwellingEvent> {
 
     final override val decider = dwelling()
     override fun DwellingEvent.aggregateIdentifier() = this.dwellingId.raw

@@ -1,4 +1,4 @@
-package com.dddheroes.axonextension
+package com.dddheroes.axonframework
 
 import com.dddheroes.shared.buildingblocks.domain.IDecider
 import org.axonframework.eventsourcing.EventSourcingHandler
@@ -8,7 +8,7 @@ import org.axonframework.modelling.command.AggregateLifecycle
 /**
  * Abstract and generic aggregate
  */
-abstract class AbstractAggregate<C, S, E> {
+abstract class DeciderAggregate<C, S, E> {
     // Main decision-making component
     abstract val decider: IDecider<C, S, E>
 
